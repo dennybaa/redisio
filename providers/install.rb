@@ -85,7 +85,7 @@ def configure
       maxmemory = (node_memory_kb * 1024 * percent_factor / new_resource.servers.length).to_s
     end
 
-    descriptors = current['ulimit'] == 0 ? current['maxclients'] + 32 : current['maxclients']
+    descriptors = current['ulimit'] == 0 ? current['maxclients'] + 32 : current['ulimit']
 
     recipe_eval do
       server_name = current['name'] || current['port']
@@ -256,7 +256,8 @@ def configure
           :configdir => current['configdir'],
           :piddir => piddir,
           :platform => node['platform'],
-          :unixsocket => current['unixsocket']
+          :unixsocket => current['unixsocket'],
+          :ulimit => descriptors
         })
         only_if { current['job_control'] == 'upstart' }
       end
